@@ -1,0 +1,226 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.check.mapper.StdCscfMapper">
+  <resultMap id="BaseResultMap" type="com.example.check.domain.StdCscf">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="province" jdbcType="VARCHAR" property="province" />
+    <result column="csValue" jdbcType="VARCHAR" property="csValue" />
+    <result column="poolValue" jdbcType="VARCHAR" property="poolValue" />
+    <result column="remark" jdbcType="VARCHAR" property="remark" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    id, province, csValue, poolValue, remark
+  </sql>
+  <select id="selectByExample" parameterType="com.example.check.domain.StdCscfExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from std_cscf
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from std_cscf
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from std_cscf
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  
+  <delete id="deleteAll" parameterType="java.lang.Integer">
+    delete from std_cscf
+  </delete>
+  
+  <delete id="deleteByExample" parameterType="com.example.check.domain.StdCscfExample">
+    delete from std_cscf
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.example.check.domain.StdCscf">
+    insert into std_cscf (id, province, csValue, poolValue, remark)
+    values (#{id,jdbcType=INTEGER}, #{province,jdbcType=VARCHAR}, #{csValue,jdbcType=VARCHAR}, 
+      #{poolValue,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR}      )
+  </insert>
+  
+  <insert id="batchImport" parameterType="java.util.List">
+    insert into std_cscf (province, csValue, poolValue, remark)
+    values 
+    <foreach collection="list" item="item" index= "index" separator =",">
+    	(
+    		#{item.province,jdbcType=VARCHAR},
+    		#{item.csValue,jdbcType=VARCHAR},
+    		#{item.poolValue,jdbcType=VARCHAR},
+    		#{item.remark,jdbcType=VARCHAR}
+    	)
+    </foreach>
+  </insert>
+  
+  <insert id="insertSelective" parameterType="com.example.check.domain.StdCscf">
+    insert into std_cscf
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="province != null">
+        province,
+      </if>
+      <if test="csValue != null">
+        csValue,
+      </if>
+      <if test="poolValue != null">
+        poolValue,
+      </if>
+      <if test="remark != null">
+        remark,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="province != null">
+        #{province,jdbcType=VARCHAR},
+      </if>
+      <if test="csValue != null">
+        #{csValue,jdbcType=VARCHAR},
+      </if>
+      <if test="poolValue != null">
+        #{poolValue,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null">
+        #{remark,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.example.check.domain.StdCscfExample" resultType="java.lang.Long">
+    select count(*) from std_cscf
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update std_cscf
+    <set>
+      <if test="record.id != null">
+        id = #{record.id,jdbcType=INTEGER},
+      </if>
+      <if test="record.province != null">
+        provinceID = #{record.province,jdbcType=VARCHAR},
+      </if>
+      <if test="record.poolValue != null">
+        l1 = #{record.poolValue,jdbcType=VARCHAR},
+      </if>
+      <if test="record.remark != null">
+        l2 = #{record.remark,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update std_cscf
+    set id = #{record.id,jdbcType=INTEGER},
+      province = #{record.province,jdbcType=VARCHAR},
+      csValue = #{record.csValue,jdbcType=VARCHAR},
+      poolValue = #{record.poolValue,jdbcType=VARCHAR},
+      remark = #{record.remark,jdbcType=VARCHAR}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.example.check.domain.StdCscf">
+    update std_cscf
+    <set>
+      <if test="province != null">
+        province = #{province,jdbcType=VARCHAR},
+      </if>
+      <if test="csValue != null">
+        csValue = #{csValue,jdbcType=VARCHAR},
+      </if>
+      <if test="poolValue != null">
+        poolValue = #{poolValue,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null">
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.example.check.domain.StdCscf">
+    update std_cscf
+    set province = #{province,jdbcType=VARCHAR},
+      csValue = #{csValue,jdbcType=VARCHAR},
+      poolValue = #{poolValue,jdbcType=VARCHAR},
+      remark = #{remark,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

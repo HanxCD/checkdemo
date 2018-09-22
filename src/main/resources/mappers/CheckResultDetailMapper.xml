@@ -1,0 +1,327 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.check.mapper.CheckResultDetailMapper">
+  <resultMap id="BaseResultMap" type="com.example.check.domain.CheckResultDetail">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="checkResultID" jdbcType="INTEGER" property="checkresultid" />
+    <result column="stdLibID" jdbcType="INTEGER" property="stdlibid" />
+    <result column="cuLibID" jdbcType="INTEGER" property="culibid" />
+    <result column="isCorrect" jdbcType="BOOLEAN" property="iscorrect" />
+    <result column="isWrong" jdbcType="BOOLEAN" property="iswrong" />
+    <result column="isLoss" jdbcType="BOOLEAN" property="isloss" />
+    <result column="isRedundant" jdbcType="BOOLEAN" property="isredundant" />
+    <result column="remark" jdbcType="VARCHAR" property="remark" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    id, checkResultID, stdLibID, cuLibID, isCorrect, isWrong, isLoss, isRedundant, remark
+  </sql>
+  
+  <select id="isTableExist" parameterType="java.lang.String"  resultType="java.lang.Long">
+  	select count(1) from information_schema.TABLES 
+  	where LCASE(table_name)= #{tableName};
+  </select>
+  
+  <update id="createTable"  parameterType="java.lang.String">
+  	CREATE TABLE ${newTableName} LIKE ${tableName};
+  </update>
+  
+  <insert id="copyTable"  parameterType="java.lang.String">
+  	INSERT INTO ${newTableName} 
+  	SELECT * FROM ${tableName};
+  </insert>
+  
+  <update id="dropTable" parameterType="java.lang.String">
+  	drop table ${tableName}   
+  </update>
+  
+  <select id="selectByExample" parameterType="com.example.check.domain.CheckResultDetailExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from check_result_detail
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from check_result_detail
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from check_result_detail
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  
+  <delete id="deleteByExample" parameterType="com.example.check.domain.CheckResultDetailExample">
+    delete from check_result_detail
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  
+  <delete id="batchDelete" parameterType="com.example.check.domain.CheckResult">
+   delete from check_result_detail WHERE checkResultID IN 
+  	<foreach collection="list" item="item" index= "index" open="(" 	separator="," close=")">
+    	#{item.id,jdbcType=INTEGER}
+    </foreach> 
+  </delete>
+  
+  <insert id="batchInsert" parameterType="java.util.List">
+    insert into check_result_detail (checkResultID, stdLibID, 
+      cuLibID, isCorrect, isWrong, isLoss, isRedundant, remark)
+    values 
+    <foreach collection="list" item="item" index= "index" separator =",">
+    	(
+    		#{item.checkresultid,jdbcType=INTEGER},
+    		#{item.stdlibid,jdbcType=INTEGER},
+    		#{item.culibid,jdbcType=INTEGER},
+    		#{item.iscorrect,jdbcType=BIT},
+    		#{item.iswrong,jdbcType=BIT},
+    		#{item.isloss,jdbcType=BIT},
+    		#{item.isredundant,jdbcType=BIT},
+    		#{item.remark,jdbcType=VARCHAR}
+    	)
+    </foreach>
+  </insert>
+  
+  <insert id="insert" parameterType="com.example.check.domain.CheckResultDetail">
+    insert into check_result_detail (id, checkResultID, stdLibID, 
+      cuLibID, isCorrect, isWrong, 
+      isLoss, isRedundant)
+    values (#{id,jdbcType=INTEGER}, #{checkresultid,jdbcType=INTEGER}, #{stdlibid,jdbcType=INTEGER}, 
+      #{culibid,jdbcType=INTEGER}, #{iscorrect,jdbcType=BIT}, #{iswrong,jdbcType=BIT}, 
+      #{isloss,jdbcType=BIT}, #{isredundant,jdbcType=BIT}, #{remark,jdbcType=VARCHAR})
+  </insert>
+  
+  <insert id="insertSelective" parameterType="com.example.check.domain.CheckResultDetail">
+    insert into check_result_detail
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="checkresultid != null">
+        checkResultID,
+      </if>
+      <if test="stdlibid != null">
+        stdLibID,
+      </if>
+      <if test="culibid != null">
+        cuLibID,
+      </if>
+      <if test="iscorrect != null">
+        isCorrect,
+      </if>
+      <if test="iswrong != null">
+        isWrong,
+      </if>
+      <if test="isloss != null">
+        isLoss,
+      </if>
+      <if test="isredundant != null">
+        isRedundant,
+      </if>
+      <if test="remark != null">
+        remark,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="checkresultid != null">
+        #{checkresultid,jdbcType=INTEGER},
+      </if>
+      <if test="stdlibid != null">
+        #{stdlibid,jdbcType=INTEGER},
+      </if>
+      <if test="culibid != null">
+        #{culibid,jdbcType=INTEGER},
+      </if>
+      <if test="iscorrect != null">
+        #{iscorrect,jdbcType=BIT},
+      </if>
+      <if test="iswrong != null">
+        #{iswrong,jdbcType=BIT},
+      </if>
+      <if test="isloss != null">
+        #{isloss,jdbcType=BIT},
+      </if>
+      <if test="isredundant != null">
+        #{isredundant,jdbcType=BIT},
+      </if>
+      <if test="remark != null">
+        #{remark,jdbcType=VARCHAR}
+      </if>
+    </trim>
+  </insert>
+  
+  <select id="countByExample" parameterType="com.example.check.domain.CheckResultDetailExample" resultType="java.lang.Long">
+    select count(*) from check_result_detail
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  
+  <update id="updateByExampleSelective" parameterType="map">
+    update check_result_detail
+    <set>
+      <if test="record.id != null">
+        id = #{record.id,jdbcType=INTEGER},
+      </if>
+      <if test="record.checkresultid != null">
+        checkResultID = #{record.checkresultid,jdbcType=INTEGER},
+      </if>
+      <if test="record.stdlibid != null">
+        stdLibID = #{record.stdlibid,jdbcType=INTEGER},
+      </if>
+      <if test="record.culibid != null">
+        cuLibID = #{record.culibid,jdbcType=INTEGER},
+      </if>
+      <if test="record.iscorrect != null">
+        isCorrect = #{record.iscorrect,jdbcType=BIT},
+      </if>
+      <if test="record.iswrong != null">
+        isWrong = #{record.iswrong,jdbcType=BIT},
+      </if>
+      <if test="record.isloss != null">
+        isLoss = #{record.isloss,jdbcType=BIT},
+      </if>
+      <if test="record.isredundant != null">
+        isRedundant = #{record.isredundant,jdbcType=BIT},
+      </if>
+      <if test="record.remark != null">
+        remark = #{record.remark,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  
+  <update id="updateByExample" parameterType="map">
+    update check_result_detail
+    set id = #{record.id,jdbcType=INTEGER},
+      checkResultID = #{record.checkresultid,jdbcType=INTEGER},
+      stdLibID = #{record.stdlibid,jdbcType=INTEGER},
+      cuLibID = #{record.culibid,jdbcType=INTEGER},
+      isCorrect = #{record.iscorrect,jdbcType=BIT},
+      isWrong = #{record.iswrong,jdbcType=BIT},
+      isLoss = #{record.isloss,jdbcType=BIT},
+      isRedundant = #{record.isredundant,jdbcType=BIT},
+      remark = #{record.remark,jdbcType=VARCHAR}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  
+  <update id="updateByPrimaryKeySelective" parameterType="com.example.check.domain.CheckResultDetail">
+    update check_result_detail
+    <set>
+      <if test="checkresultid != null">
+        checkResultID = #{checkresultid,jdbcType=INTEGER},
+      </if>
+      <if test="stdlibid != null">
+        stdLibID = #{stdlibid,jdbcType=INTEGER},
+      </if>
+      <if test="culibid != null">
+        cuLibID = #{culibid,jdbcType=INTEGER},
+      </if>
+      <if test="iscorrect != null">
+        isCorrect = #{iscorrect,jdbcType=BIT},
+      </if>
+      <if test="iswrong != null">
+        isWrong = #{iswrong,jdbcType=BIT},
+      </if>
+      <if test="isloss != null">
+        isLoss = #{isloss,jdbcType=BIT},
+      </if>
+      <if test="isredundant != null">
+        isRedundant = #{isredundant,jdbcType=BIT},
+      </if>
+      <if test="remark != null">
+        remark = #{record.remark,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  
+  <update id="updateByPrimaryKey" parameterType="com.example.check.domain.CheckResultDetail">
+    update check_result_detail
+    set checkResultID = #{checkresultid,jdbcType=INTEGER},
+      stdLibID = #{stdlibid,jdbcType=INTEGER},
+      cuLibID = #{culibid,jdbcType=INTEGER},
+      isCorrect = #{iscorrect,jdbcType=BIT},
+      isWrong = #{iswrong,jdbcType=BIT},
+      isLoss = #{isloss,jdbcType=BIT},
+      isRedundant = #{isredundant,jdbcType=BIT},
+      remark = #{record.remark,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

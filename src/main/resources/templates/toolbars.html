@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+<head>
+</head>
+<body>
+	<div id="toolbar">
+		<input type="button" value="新增" id="addBtn" data-toggle="modal" data-target="#addTableModal" class="btn btn-primary"></input>
+		<input type="button" value="修改" id="editBtn" data-toggle="modal" data-target="#editTableModal" class="btn btn-primary" onclick="editTable()"></input>
+		<input type="button" value="删除" id="deleteBtn" data-toggle="modal" data-target="#deleteTableModal" class="btn btn-primary" onclick="deleteTable()"></input>
+		<input type="button" value="导出" id="downloadBtn" data-toggle="modal" data-target="#downloadTableModal" class="btn btn-primary" onclick="downLoadTable()"></input>
+	</div>
+</body>
+</html>

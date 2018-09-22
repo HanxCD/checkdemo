@@ -1,0 +1,303 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.check.mapper.CheckResultMapper">
+  <resultMap id="BaseResultMap" type="com.example.check.domain.CheckResult">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="category" jdbcType="VARCHAR" property="category" />
+    <result column="deviceName" jdbcType="VARCHAR" property="deviceName" />
+    <result column="vendor" jdbcType="VARCHAR" property="vendor" />
+    <result column="totalCounts" jdbcType="INTEGER" property="totalcounts" />
+    <result column="correctNum" jdbcType="INTEGER" property="correctnum" />
+    <result column="wrongNum" jdbcType="INTEGER" property="wrongnum" />
+    <result column="lossNum" jdbcType="INTEGER" property="lossnum" />
+    <result column="redundantNum" jdbcType="INTEGER" property="redundantnum" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    id, category, deviceName, vendor, totalCounts, correctNum, wrongNum, lossNum, redundantNum
+  </sql>
+  
+  <select id="isTableExist" parameterType="java.lang.String"  resultType="java.lang.Long">
+  	select count(1) from information_schema.TABLES 
+  	where LCASE(table_name)= #{tableName};
+  </select>
+  
+  <update id="createTable"  parameterType="java.lang.String">
+  	CREATE TABLE ${newTableName} LIKE ${tableName};
+  </update>
+  
+  <insert id="copyTable"  parameterType="java.lang.String">
+  	INSERT INTO ${newTableName} 
+  	SELECT * FROM ${tableName};
+  </insert>
+  
+  <update id="dropTable" parameterType="java.lang.String">
+  	drop table ${tableName}   
+  </update>
+  
+  <select id="selectByExample" parameterType="com.example.check.domain.CheckResultExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from check_result
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from check_result
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from check_result
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  
+  <delete id="deleteByExample" parameterType="com.example.check.domain.CheckResultExample">
+    delete from check_result
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  
+  <insert id="insert" parameterType="com.example.check.domain.CheckResult">
+    insert into check_result (id, category, deviceName, vendor,
+      totalCounts, correctNum, wrongNum, 
+      lossNum, redundantNum)
+    values (#{id,jdbcType=INTEGER},#{category,jdbcType=VARCHAR},#{deviceName,jdbcType=VARCHAR},
+    	#{vendor,jdbcType=VARCHAR},#{category,jdbcType=VARCHAR},#{totalcounts,jdbcType=INTEGER}, 
+    	#{correctnum,jdbcType=INTEGER},#{wrongnum,jdbcType=INTEGER},#{lossnum,jdbcType=INTEGER}, #{redundantnum,jdbcType=INTEGER})
+  </insert>
+  
+  <insert id="insertSelective" keyProperty="id" useGeneratedKeys="true" parameterType="com.example.check.domain.CheckResult">
+    insert into check_result
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="category != null">
+        category,
+      </if>
+      <if test="deviceName != null">
+        deviceName,
+      </if>
+      <if test="vendor != null">
+        vendor,
+      </if>
+      <if test="totalcounts != null">
+        totalCounts,
+      </if>
+      <if test="correctnum != null">
+        correctNum,
+      </if>
+      <if test="wrongnum != null">
+        wrongNum,
+      </if>
+      <if test="lossnum != null">
+        lossNum,
+      </if>
+      <if test="redundantnum != null">
+        redundantNum,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="category != null">
+        #{category,jdbcType=VARCHAR},
+      </if>
+      <if test="deviceName != null">
+        #{deviceName,jdbcType=VARCHAR},
+      </if>
+      <if test="vendor != null">
+        #{vendor,jdbcType=VARCHAR},
+      </if>
+      <if test="totalcounts != null">
+        #{totalcounts,jdbcType=INTEGER},
+      </if>
+      <if test="correctnum != null">
+        #{correctnum,jdbcType=INTEGER},
+      </if>
+      <if test="wrongnum != null">
+        #{wrongnum,jdbcType=INTEGER},
+      </if>
+      <if test="lossnum != null">
+        #{lossnum,jdbcType=INTEGER},
+      </if>
+      <if test="redundantnum != null">
+        #{redundantnum,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  
+  <select id="countByExample" parameterType="com.example.check.domain.CheckResultExample" resultType="java.lang.Long">
+    select count(*) from check_result
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  
+  <update id="updateByExampleSelective" parameterType="map">
+    update check_result
+    <set>
+      <if test="record.id != null">
+        id = #{record.id,jdbcType=INTEGER},
+      </if>
+      <if test="record.category != null">
+        category = #{record.category,jdbcType=VARCHAR},
+      </if>
+      <if test="record.deviceName != null">
+        deviceName = #{record.deviceName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.vendor != null">
+        vendor = #{record.vendor,jdbcType=VARCHAR},
+      </if>
+      <if test="record.totalcounts != null">
+        totalCounts = #{record.totalcounts,jdbcType=INTEGER},
+      </if>
+      <if test="record.correctnum != null">
+        correctNum = #{record.correctnum,jdbcType=INTEGER},
+      </if>
+      <if test="record.wrongnum != null">
+        wrongNum = #{record.wrongnum,jdbcType=INTEGER},
+      </if>
+      <if test="record.lossnum != null">
+        lossNum = #{record.lossnum,jdbcType=INTEGER},
+      </if>
+      <if test="record.redundantnum != null">
+        redundantNum = #{record.redundantnum,jdbcType=INTEGER},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  
+  <update id="updateByExample" parameterType="map">
+    update check_result
+    set id = #{record.id,jdbcType=INTEGER},
+      category = #{record.category,jdbcType=VARCHAR},
+      deviceName = #{record.deviceName,jdbcType=VARCHAR},
+      vendor = #{record.vendor,jdbcType=VARCHAR},
+      totalCounts = #{record.totalcounts,jdbcType=INTEGER},
+      correctNum = #{record.correctnum,jdbcType=INTEGER},
+      wrongNum = #{record.wrongnum,jdbcType=INTEGER},
+      lossNum = #{record.lossnum,jdbcType=INTEGER},
+      redundantNum = #{record.redundantnum,jdbcType=INTEGER}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  
+  <update id="updateByPrimaryKeySelective" parameterType="com.example.check.domain.CheckResult">
+    update check_result
+    <set>
+      <if test="category != null">
+        category = #{category,jdbcType=VARCHAR},
+      </if>
+      <if test="deviceName != null">
+        deviceName = #{deviceName,jdbcType=VARCHAR},
+      </if>
+      <if test="vendor != null">
+        vendor = #{vendor,jdbcType=VARCHAR},
+      </if>
+      <if test="totalcounts != null">
+        totalCounts = #{totalcounts,jdbcType=INTEGER},
+      </if>
+      <if test="correctnum != null">
+        correctNum = #{correctnum,jdbcType=INTEGER},
+      </if>
+      <if test="wrongnum != null">
+        wrongNum = #{wrongnum,jdbcType=INTEGER},
+      </if>
+      <if test="lossnum != null">
+        lossNum = #{lossnum,jdbcType=INTEGER},
+      </if>
+      <if test="redundantnum != null">
+        redundantNum = #{redundantnum,jdbcType=INTEGER},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  
+  <update id="updateByPrimaryKey" parameterType="com.example.check.domain.CheckResult">
+    update check_result
+    set
+      category = #{category,jdbcType=VARCHAR},
+      deviceName = #{deviceName,jdbcType=VARCHAR},
+      vendor = #{vendor,jdbcType=VARCHAR},
+      totalCounts = #{totalcounts,jdbcType=INTEGER},
+      correctNum = #{correctnum,jdbcType=INTEGER},
+      wrongNum = #{wrongnum,jdbcType=INTEGER},
+      lossNum = #{lossnum,jdbcType=INTEGER},
+      redundantNum = #{redundantnum,jdbcType=INTEGER}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

@@ -1,0 +1,275 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.example.check.mapper.SysBusiTableDefMapper">
+	<!-- 表定义 -->
+	<resultMap id="BaseResultMap" type="com.example.check.domain.SysBusiTableDef">
+		<id column="id" jdbcType="INTEGER" property="id" />
+		<result column="type" jdbcType="INTEGER" property="type" />
+		<result column="tableName" jdbcType="VARCHAR" property="tableName" />
+		<result column="displayName" jdbcType="VARCHAR" property="displayName" />
+		<result column="status" jdbcType="INTEGER" property="status" />
+		<result column="classify" jdbcType="VARCHAR" property="classify" />
+		<result column="className" jdbcType="VARCHAR" property="className" />
+		<result column="tableDesc" jdbcType="VARCHAR" property="tableDesc" />
+		<result column="createTime" jdbcType="DATE" property="createTime" />
+		<result column="updateTime" jdbcType="DATE" property="updateTime" />
+	</resultMap>
+	
+	<sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+	
+	<sql id="Base_Column_List">
+		ID,TYPE,TABLENAME,DISPLAYNAME,STATUS,CLASSIFY,CLASSNAME,TABLEDESC,CREATETIME,UPDATETIME
+	</sql>
+	
+	<select id="selectByExample" parameterType="com.example.check.domain.SysBusiTableDefExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from SYS_BUSI_TABLE_DEF
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from SYS_BUSI_TABLE_DEF
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <select id="selectByTableName" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from SYS_BUSI_TABLE_DEF
+    where tableName = #{tableName,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from SYS_BUSI_TABLE_DEF
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.example.check.domain.SysBusiTableDefExample">
+    delete from SYS_BUSI_TABLE_DEF
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <delete id="deleteByPrimaryKeyList" parameterType="java.util.List">
+		DELETE FROM SYS_BUSI_TABLE_DEF WHERE ID IN 
+		<foreach item="item" index="index" collection="list" open="(" separator="," close=")">
+			#{item}
+		</foreach>
+  </delete>
+  <insert id="insert" parameterType="com.example.check.domain.SysBusiTableDef">
+    insert into SYS_BUSI_TABLE_DEF (ID,TYPE,TABLENAME,DISPLAYNAME,STATUS,CLASSIFY,CLASSNAME,TABLEDESC,CREATETIME,UPDATETIME)
+    values  (#{id,jdbcType=INTEGER},#{type,jdbcType=INTEGER},#{tableName,jdbcType=VARCHAR},
+    #{displayName,jdbcType=VARCHAR},#{status,jdbcType=INTEGER},#{classify,jdbcType=VARCHAR},#{className,jdbcType=VARCHAR},
+    #{tableDesc,jdbcType=VARCHAR},#{createTime,jdbcType=DATE},#{updateTime,jdbcType=DATE})  
+
+  </insert>
+  <insert id="insertSelective" parameterType="com.example.check.domain.SysBusiTableDef">
+    insert into SYS_BUSI_TABLE_DEF
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="type != null">
+        type,
+      </if>
+      <if test="tableName != null">
+        tableName,
+      </if>
+      <if test="displayName != null">
+        displayName,
+      </if>
+      <if test="status != null">
+        status,
+      </if>
+      <if test="classify != null">
+        classify,
+      </if>
+      <if test="className != null">
+        className,
+      </if>
+      <if test="tableDesc != null">
+        tableDesc,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="type != null">
+        #{type,jdbcType=INTEGER},
+      </if>
+      <if test="tableName != null">
+        #{tableName,jdbcType=VARCHAR},
+      </if>
+      <if test="displayname != null">
+        #{displayname,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null">
+        #{status,jdbcType=INTEGER},
+      </if>
+      <if test="classify != null">
+        #{classify,jdbcType=VARCHAR},
+      </if>
+      <if test="className != null">
+        #{className,jdbcType=VARCHAR},
+      </if>
+      <if test="tableDesc != null">
+        #{tableDesc,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.example.check.domain.SysBusiTableDefExample" resultType="java.lang.Long">
+    select count(*) from SYS_BUSI_TABLE_DEF
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update SYS_BUSI_TABLE_DEF
+    <set>
+      <if test="record.id != null">
+        id = #{record.id,jdbcType=INTEGER},
+      </if>
+      <if test="record.type != null">
+        type = #{record.type,jdbcType=INTEGER},
+      </if>
+      <if test="record.tableName != null">
+        tableName = #{record.tableName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.displayName != null">
+        displayName = #{record.displayName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.status != null">
+        status = #{record.status,jdbcType=VARCHAR},
+      </if>
+      <if test="record.classify != null">
+        classify = #{record.classify,jdbcType=VARCHAR},
+      </if>
+      <if test="record.className != null">
+        className = #{record.className,jdbcType=VARCHAR},
+      </if>
+      <if test="record.tableDesc != null">
+        tableDesc = #{record.tabledesc,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update SYS_BUSI_TABLE_DEF
+    set id = #{record.id,jdbcType=INTEGER},
+    	type = #{record.type,jdbcType=INTEGER},
+      tableName = #{record.tableName,jdbcType=VARCHAR},
+      displayName = #{record.displayName,jdbcType=VARCHAR},
+      status = #{record.status,jdbcType=INTEGER},
+      classify = #{record.classify,jdbcType=VARCHAR},
+      className = #{record.className,jdbcType=VARCHAR},
+      tableDesc = #{record.tableDesc,jdbcType=VARCHAR}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.example.check.domain.SysBusiTableDef">
+    update SYS_BUSI_TABLE_DEF
+    <set>
+      <if test="type != null">
+        type = #{type,jdbcType=INTEGER},
+      </if>
+      <if test="tableName != null">
+        tableName = #{tableName,jdbcType=VARCHAR},
+      </if>
+      <if test="displayName != null">
+        displayName = #{displayName,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null">
+        status = #{status,jdbcType=INTEGER},
+      </if>
+      <if test="classify != null">
+        classify = #{classify,jdbcType=VARCHAR},
+      </if>
+      <if test="className != null">
+        className = #{className,jdbcType=VARCHAR},
+      </if>
+      <if test="tableDesc != null">
+        tableDesc = #{tableDesc,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.example.check.domain.SysBusiTableDef">
+    update SYS_BUSI_TABLE_DEF
+    set type = #{type,jdbcType=INTEGER},
+    	tableName = #{tableName,jdbcType=INTEGER},
+    	displayName = #{displayName,jdbcType=INTEGER},
+      	status = #{status,jdbcType=INTEGER},
+      	classify = #{classify,jdbcType=VARCHAR},
+      	className = #{className,jdbcType=VARCHAR},
+      	tableDesc = #{tableDesc,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

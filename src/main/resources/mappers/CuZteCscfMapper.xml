@@ -1,0 +1,420 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.check.mapper.CuZteCscfMapper">
+  <resultMap id="BaseResultMap" type="com.example.check.domain.CuZteCscf">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="hostGroupId" jdbcType="VARCHAR" property="hostGroupId" />
+    <result column="hostGroupName" jdbcType="VARCHAR" property="hostGroupName" />
+    <result column="poolId" jdbcType="VARCHAR" property="poolId" />
+    <result column="heartBeat" jdbcType="VARCHAR" property="heartBeat" />
+    <result column="unusable" jdbcType="INTEGER" property="unusable" />
+    <result column="usable" jdbcType="INTEGER" property="usable" />
+    <result column="unusableFailed" jdbcType="INTEGER" property="unusableFailed" />
+    <result column="usableSuccess" jdbcType="INTEGER" property="usableSuccess" />
+    <result column="csValue" jdbcType="VARCHAR" property="csValue" />
+    <result column="scscf1" jdbcType="VARCHAR" property="scscf1" />
+    <result column="deviceName" jdbcType="VARCHAR" property="deviceName" />
+    <result column="province" jdbcType="VARCHAR" property="province" />
+    <result column="vendor" jdbcType="VARCHAR" property="vendor" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    id,hostGroupId,hostGroupName,poolId,heartBeat,unusable,usable,unusableFailed,
+    usableSuccess,csValue,scscf1,deviceName,vendor,province
+  </sql>
+  <select id="isTableExist" parameterType="java.lang.String"  resultType="java.lang.Long">
+  	select count(1) from information_schema.TABLES
+  	where LCASE(table_name)= #{tableName};
+  </select>
+
+  <update id="createTable"  parameterType="java.lang.String">
+  	CREATE TABLE ${newTableName} LIKE ${tableName};
+  </update>
+
+  <insert id="copyTable"  parameterType="java.lang.String">
+  	INSERT INTO ${newTableName}
+  	SELECT * FROM ${tableName};
+  </insert>
+
+  <update id="dropTable" parameterType="java.lang.String">
+  	drop table ${tableName}
+  </update>
+  
+  <select id="selectByExample" parameterType="com.example.check.domain.CuZteCscfExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from cu_zte_cscf
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from cu_zte_cscf
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  
+  <select id="selectDeviceByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+  	 select 
+    <include refid="Base_Column_List" />
+    from cu_zte_cscf
+    where deviceName = #{deviceName,jdbcType=VARCHAR}
+  </select>
+  
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from cu_zte_cscf
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  
+  <delete id="deleteByExample" parameterType="com.example.check.domain.CuZteCscfExample">
+    delete from cu_zte_cscf
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  
+  <insert id="batchImport" parameterType="java.util.List">
+    insert into cu_zte_cscf (hostGroupId, hostGroupName, heartBeat, unusable,usable, unusableFailed, usableSuccess,deviceName,vendor)
+    values 
+    <foreach collection="list" item="item" index= "index" separator =",">
+    	(
+    		#{item.hostGroupId,jdbcType=VARCHAR},
+    		#{item.hostGroupName,jdbcType=VARCHAR},
+    		#{item.heartBeat,jdbcType=VARCHAR},
+    		#{item.unusable,jdbcType=INTEGER},
+    		#{item.usable,jdbcType=INTEGER},
+    		#{item.unusableFailed,jdbcType=INTEGER},
+    		#{item.usableSuccess,jdbcType=INTEGER},
+    		#{item.deviceName,jdbcType=VARCHAR},
+    		#{item.vendor,jdbcType=VARCHAR}
+    	)
+    </foreach>
+  </insert>
+  
+  <insert id="insert" parameterType="com.example.check.domain.CuZteCscf">
+    insert into cu_zte_cscf (id, hostGroupId, hostGroupName, poolId, heartBeat,unusable,usable,unusableFailed,
+    usableSuccess,csValue,scscf1,deviceName,vendor)
+    values (#{id,jdbcType=INTEGER}, #{hostGroupId,jdbcType=VARCHAR},#{hostGroupName,jdbcType=VARCHAR},
+    #{poolId,jdbcType=VARCHAR}, #{heartBeat,jdbcType=VARCHAR}, #{unusable,jdbcType=INTEGER},#{usable,jdbcType=INTEGER},
+    #{unusableFailed,jdbcType=INTEGER},#{usableSuccess,jdbcType=INTEGER},#{csValue,jdbcType=VARCHAR},#{scscf1,jdbcType=VARCHAR},
+    #{deviceName,jdbcType=VARCHAR},#{vendor,jdbcType=VARCHAR})
+  </insert>
+  
+  <insert id="insertSelective" parameterType="com.example.check.domain.CuZteCscf">
+    insert into cu_zte_cscf
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="hostGroupId != null">
+        hostGroupId,
+      </if>
+      <if test="hostGroupName != null">
+        hostGroupName,
+      </if>
+      <if test="poolId != null">
+        poolId,
+      </if>
+      <if test="heartBeat != null">
+        heartBeat,
+      </if>
+      <if test="unusable != null">
+        unusable,
+      </if>
+      <if test="usable != null">
+        usable,
+      </if>
+      <if test="unusableFailed != null">
+        unusableFailed,
+      </if>
+      <if test="usableSuccess != null">
+        usableSuccess,
+      </if>
+      <if test="csValue != null">
+        csValue,
+      </if>
+      <if test="scscf1 != null">
+        scscf1,
+      </if>
+      <if test="deviceName != null">
+        deviceName,
+      </if>
+      <if test="province != null">
+        province,
+      </if>
+      <if test="vendor != null">
+        vendor,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="hostGroupId != null">
+        #{hostGroupId,jdbcType=VARCHAR},
+      </if>
+      <if test="hostGroupName != null">
+        #{hostGroupName,jdbcType=VARCHAR},
+      </if>
+      <if test="poolId != null">
+        #{poolId,jdbcType=VARCHAR},
+      </if>
+      <if test="heartBeat != null">
+        #{heartBeat,jdbcType=VARCHAR},
+      </if>
+      <if test="unusable != null">
+        #{unusable,jdbcType=INTEGER},
+      </if>
+      <if test="usable != null">
+        #{usable,jdbcType=INTEGER},
+      </if>
+      <if test="unusableFailed != null">
+        #{unusableFailed,jdbcType=INTEGER},
+      </if>
+      <if test="usableSuccess != null">
+        #{usableSuccess,jdbcType=INTEGER},
+      </if>
+      <if test="csValue != null">
+        #{csValue,jdbcType=VARCHAR},
+      </if>
+      <if test="scscf1 != null">
+        #{scscf1,jdbcType=VARCHAR},
+      </if>
+      <if test="deviceName != null">
+        #{deviceName,jdbcType=VARCHAR},
+      </if>
+      <if test="province != null">
+        #{province,jdbcType=VARCHAR},
+      </if>
+      <if test="vendor != null">
+        #{vendor,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  
+  <select id="countByExample" parameterType="com.example.check.domain.CuZteCscfExample" resultType="java.lang.Long">
+    select count(*) from cu_zte_cscf
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  
+  <update id="updateByExampleSelective" parameterType="map">
+    update cu_zte_cscf
+    <set>
+      <if test="record.id != null">
+        id = #{record.id,jdbcType=INTEGER},
+      </if>
+      <if test="record.hostGroupId != null">
+        hostGroupId = #{record.hostGroupId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.hostGroupName != null">
+        hostGroupName = #{record.hostGroupName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.poolId != null">
+        poolId = #{record.poolId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.heartBeat != null">
+        heartBeat = #{record.heartBeat,jdbcType=VARCHAR},
+      </if>
+      <if test="record.unusable != null">
+        unusable = #{record.unusable,jdbcType=INTEGER},
+      </if>
+      <if test="record.usable != null">
+        usable = #{record.usable,jdbcType=INTEGER},
+      </if>
+      <if test="record.unusableFailed != null">
+        unusableFailed = #{record.unusableFailed,jdbcType=INTEGER},
+      </if>
+      <if test="record.usableSuccess != null">
+        usableSuccess = #{record.usableSuccess,jdbcType=INTEGER},
+      </if>
+      <if test="record.csValue != null">
+        csValue = #{record.csValue,jdbcType=VARCHAR},
+      </if>
+      <if test="record.scscf1 != null">
+        scscf1 = #{record.scscf1,jdbcType=VARCHAR},
+      </if>
+      <if test="record.deviceName != null">
+        deviceName = #{record.deviceName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.province != null">
+        province = #{record.province,jdbcType=VARCHAR},
+      </if>
+      <if test="record.vendor != null">
+        vendor = #{record.vendor,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  
+  <update id="batchUpdate" parameterType="java.util.List">
+	<foreach collection="list" separator=";" item="item">  
+        update cu_zte_cscf set  
+        poolId = #{item.poolId,jdbcType=VARCHAR},  
+        csValue = #{item.csValue,jdbcType=VARCHAR},  
+        scscf1 = #{item.scscf1,jdbcType=VARCHAR}
+        where hostGroupId=#{item.scscf1,jdbcType=VARCHAR}
+    </foreach>
+  </update>
+  
+  <update id="batchUpdateProvince" parameterType="java.util.List">
+	<foreach collection="list" separator=";" item="item">  
+        update cu_zte_cscf set  
+        province = #{item.province,jdbcType=VARCHAR}
+        where csValue =#{item.csValue,jdbcType=VARCHAR}
+    </foreach>
+  </update>
+  
+  <update id="updateByExample" parameterType="map">
+    update cu_zte_cscf
+    set id = #{record.id,jdbcType=INTEGER},
+      hostGroupId = #{record.hostGroupId,jdbcType=VARCHAR},
+      hostGroupName = #{record.hostGroupName,jdbcType=VARCHAR},
+      poolId = #{record.poolId,jdbcType=VARCHAR},
+      heartBeat = #{record.heartBeat,jdbcType=VARCHAR},
+      unusable = #{record.unusable,jdbcType=INTEGER},
+      usable = #{record.usable,jdbcType=INTEGER},
+      unusableFailed = #{record.unusableFailed,jdbcType=INTEGER},
+      usableSuccess = #{record.usableSuccess,jdbcType=INTEGER},
+      csValue = #{record.csValue,jdbcType=VARCHAR},
+      scscf1 = #{record.scscf1,jdbcType=VARCHAR},
+      deviceName = #{record.deviceName,jdbcType=VARCHAR},
+      vendor = #{record.vendor,jdbcType=VARCHAR}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  
+  <update id="updateByPrimaryKeySelective" parameterType="com.example.check.domain.CuZteCscf">
+    update cu_zte_cscf
+    <set>
+
+      <if test="hostGroupId != null">
+      hostGroupId = #{hostGroupId,jdbcType=VARCHAR},
+    </if>
+    <if test="hostGroupName != null">
+      hostGroupName = #{hostGroupName,jdbcType=VARCHAR},
+    </if>
+    <if test="poolId != null">
+      poolId = #{poolId,jdbcType=VARCHAR},
+    </if>
+    <if test="heartBeat != null">
+      heartBeat = #{heartBeat,jdbcType=VARCHAR},
+    </if>
+    <if test="unusable != null">
+      unusable = #{unusable,jdbcType=INTEGER},
+    </if>
+    <if test="usable != null">
+      usable = #{usable,jdbcType=INTEGER},
+    </if>
+    <if test="unusableFailed != null">
+      unusableFailed = #{unusableFailed,jdbcType=INTEGER},
+    </if>
+    <if test="usableSuccess != null">
+      usableSuccess = #{usableSuccess,jdbcType=INTEGER},
+    </if>
+    <if test="csValue != null">
+      csValue = #{csValue,jdbcType=VARCHAR},
+    </if>
+    <if test="scscf1 != null">
+      scscf1 = #{scscf1,jdbcType=VARCHAR}
+    </if>
+    <if test="deviceName != null">
+      deviceName = #{deviceName,jdbcType=VARCHAR},
+    </if>
+    <if test="province != null">
+      province = #{province,jdbcType=VARCHAR},
+    </if>
+	<if test="vendor != null">
+      vendor = #{vendor,jdbcType=VARCHAR}
+    </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  
+  <update id="updateByPrimaryKey" parameterType="com.example.check.domain.CuZteCscf">
+    update cu_zte_cscf
+    set 
+      hostGroupId = #{record.hostGroupId,jdbcType=VARCHAR},
+      hostGroupName = #{record.hostGroupName,jdbcType=VARCHAR},
+      poolId = #{record.poolId,jdbcType=VARCHAR},
+      heartBeat = #{record.heartBeat,jdbcType=VARCHAR},
+      unusable = #{record.unusable,jdbcType=INTEGER},
+      usable = #{record.usable,jdbcType=INTEGER},
+      unusableFailed = #{record.unusableFailed,jdbcType=INTEGER},
+      usableSuccess = #{record.usableSuccess,jdbcType=INTEGER},
+      csValue = #{record.csValue,jdbcType=VARCHAR},
+      scscf1 = #{record.scscf1,jdbcType=VARCHAR},
+      deviceName = #{record.deviceName,jdbcType=VARCHAR},
+      vendor = #{record.vendor,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

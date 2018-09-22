@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+<head>
+<meta charset="utf-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+<title>现网数据管理</title>
+<link th:href="@{/Bootstrap/bootstrap/css/bootstrap.min.css}"  rel="stylesheet" />
+<link th:href="@{/Bootstrap/bootstrap/css/bootstrap-table.css}" rel="stylesheet" />
+<link th:href="@{/Bootstrap/bootstrap/css/bootstrap-editable.css}" rel="stylesheet" />
+<link th:href="@{/Bootstrap/bootstrap/css/font-awesome.min.css}" rel="stylesheet" />
+<link th:href="@{/Bootstrap/bootstrap/css/ionicons.min.css}" rel="stylesheet" />
+<link th:href="@{/Bootstrap/bootstrap/css/dataTables.bootstrap.css}" rel="stylesheet" />
+<link th:href="@{/Bootstrap/dist/css/AdminLTE.min.css}" rel="stylesheet" />
+<link th:href="@{/Bootstrap/dist/css/_all-skins.min.css}" rel="stylesheet" />
+<link th:href="@{/Bootstrap/fileinput/css/fileinput.css}"  rel="stylesheet" />
+</head>
+<body>
+		<section class="content-header">
+		<h1>现网数据管理</h1>
+		</section>
+		<section class="content table-content">
+			<form class="form-inline" >
+				<include  file="../toolbars.html" />
+			</form>
+			<table id="dataGrid">
+			</table>
+		</section>
+		<!-- 新增标准数据的模态框，在修改标准数据中将获取一行的值放入input中，改变一些参数继续使用 -->
+		<!--#include  file="../modalDialog.html" -->
+		
+		<!-- <section class="content table-content">
+			<div  class="box-body">
+				<table id="dataGrid" data-response-handler="responseHandler">
+				</table>
+			</div>
+		</section> -->
+</body>
+<!-- jQuery 2.2.3 -->
+<script th:src="@{/Bootstrap/plugins/jQuery/jquery-2.2.3.min.js}">
+<!-- Bootstrap 3.3.6 -->
+<script th:src="@{/Bootstrap/bootstrap/js/bootstrap.min.js}"></script>
+<script th:src="@{/Bootstrap/bootstrap/js/bootstrap.min.js}"></script>
+<script th:src="@{/Bootstrap/bootstrap/js/bootstrap-table.js}"></script>
+<script th:src="@{/Bootstrap/bootstrap/js/bootstrap-table-zh-CN.js}"></script>
+<script th:src="@{/Bootstrap/bootstrap/js/bootstrap-table-editable.js}"></script>
+<script th:src="@{/Bootstrap/bootstrap/js/bootstrap-editable.js}"></script>
+<!-- DataTables -->
+<script th:src="@{/Bootstrap/plugins/datatables/dataTables.bootstrap.js}"></script>
+<script th:src="@{/Bootstrap/plugins/datatables/jquery.dataTables.min.js}"></script>
+<!-- FileInput -->
+<script th:src="@{/Bootstrap/fileinput/js/fileinput.js}"></script>
+<script th:src="@{/Bootstrap/fileinput/locales/zh.js}"></script>
+<script th:src="@{/js/fileutil.js}"></script>
+<!-- SlimScroll -->
+<script th:src="@{/Bootstrap/plugins/slimSroll/jquery.slimscroll.min.js}"></script>
+<!-- FastClick -->
+<script th:src="@{/Bootstrap/plugins/fastclick/fastclick.js}"></script>
+<!-- AdminLTE App -->
+<script th:src="@{/Bootstrap/dist/js/app.min.js}"></script>
+<!-- AdminLTE for demo purposes -->
+<!-- <script th:src="@{/Bootstrap/dist/js/demo.js}"></script> -->
+<script th:src="@{/Bootstrap/plugins/jQuery/jquery.cookie.js}"></script>
+	<!-- page script -->
+<script type="text/javascript">
+	$(function() {
+		//初始加载
+		initDataGrid();
+	});
+	function initDataGrid() {
+		//创建bootstrapTable
+		$("#dataGrid").bootstrapTable({
+			method:"get",
+			//极为重要，缺失无法执行queryParams，传递page参数
+			contentType : "application/x-www-form-urlencoded",
+			dataType:"json",
+			url:'/data/list/1', 
+			queryParams:queryParam,
+			pagination:true,//显示分页条：页码，条数等
+			striped:true,//隔行变色
+			pageNumber:1,//首页页码
+			pageSize:10,//分页，页面数据条数
+			uniqueId:"id",//Indicate an unique identifier for each row
+			sidePagination:"server",//在服务器分页
+			toolbar:"#toolbar",//工具栏
+			columns: [{
+                checkbox: true
+            }, {
+                field: 'tableName',
+                title: '表英文名字',
+                align: 'center'
+             
+            }, {
+                field: 'displayName',
+                title: '表中文名字',
+                align: 'center'
+              
+            }, {
+                field: 'classify',
+                title: '分类',
+                align: 'center'
+              
+            }, {
+                field: 'tableDesc',
+                title: '描述',
+                align: 'center'
+              
+            }, {
+                field: 'createTime',
+                title: '创建时间',
+                align: 'center'
+                
+            }, {
+                field: 'vendor',
+                title: '操作',
+                align: 'center',
+                formatter: operateFormatter //自定义方法，添加操作按钮
+            }],
+			search : false,//搜索
+			strictSearch: true,
+            searchOnEnterKey : true,
+			showRefresh : true,//刷新
+            showToggle : true//
+ 
+		});
+	}
+	function queryParam(params){
+    	var param = {
+    			limit : params.limit, // 页面大小
+    	        offset : params.offset, // 页码
+    	        pageNumber : params.pageNumber,
+    	        pageSize : params.pageSize
+    	};
+    	return param;
+    }
+</script>
+<script th:src="@{/js/commonutil.js}"></script>
+</html>
